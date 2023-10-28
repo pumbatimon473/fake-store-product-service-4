@@ -3,7 +3,6 @@ package com.demo.fakestoreproductservice4;
 import com.demo.fakestoreproductservice4.logger.MyLogger;
 import com.demo.fakestoreproductservice4.models.Category;
 import com.demo.fakestoreproductservice4.models.Product;
-import com.demo.fakestoreproductservice4.services.ProductService;
 import com.demo.fakestoreproductservice4.services.SelfCategoryService;
 import com.demo.fakestoreproductservice4.services.SelfProductService;
 import jakarta.transaction.Transactional;
@@ -106,9 +105,6 @@ class FakeStoreProductService4ApplicationTests {
         logger.logInfo("SelfProductService :: removeProduct(" + productId + ") :: " + this.productService.removeProduct(productId));
     }
 
-
-
-
     @Test
     void selfCategoryServiceGetCategoryByName() {
         String categoryName = "electronics";
@@ -121,5 +117,64 @@ class FakeStoreProductService4ApplicationTests {
         logger.logInfo("SelfCategoryService :: getProductsByCategory(" + categoryName + ") :: " + this.categoryService.getProductsByCategory(new Category(categoryName)));
     }
 
+    /**
+     * EXAMPLE of a "query by properties of a property"
+     */
+    @Test
+    void selfProductServiceGetProductsByCategoryName() {
+        String categoryName = "electronics";
+        logger.logInfo("SelfProductService :: getProductsByCategoryName(" + categoryName + ") :: " + this.productService.getProductsByCategoryName(categoryName));
+    }
 
+    /**
+     * EXAMPLE of a "query by properties of a property"
+     * Following Convention: Property name separated by an underscore
+     */
+    @Test
+    void selfProductServiceGetProductsByCategory_Name() {
+        String categoryName = "electronics";
+        logger.logInfo("SelfProductService :: getProductsByCategory_Name(" + categoryName + ") :: " + this.productService.getProductsByCategory_Name(categoryName));
+    }
+
+    @Test
+    void selfProductServiceGetProductsByPriceAndCategory_Name() {
+        Double price = 100.0;
+        String categoryName = "electronics";
+        logger.logInfo("SelfProductService :: getProductsByPriceAndCategory_Name(" + price + ", " + categoryName + ") :: " + this.productService.getProductsByPriceAndCategory_Name(price, categoryName));
+    }
+
+    @Test
+    void selfProductServiceFindProductsByTitle() {
+        String title = "pro";
+        logger.logInfo("SelfProductService :: getProductsByTitle(" + title + ") :: " + this.productService.getProductsByTitle(title));
+    }
+
+    @Test
+    void selfProductServiceGetProductsMatchingDesc() {
+        String desc = "processor";
+        logger.logInfo("SelfProductService :: getProductsMatchingDesc(" + desc + ") :: " + this.productService.getProductsMatchingDesc(desc));
+    }
+
+    /**
+     * FAILED:
+     * org.springframework.dao.InvalidDataAccessResourceUsageException: Unable to find column position by name: rating_id [Column 'rating_id' not found.] [n/a]; SQL [n/a]
+     *
+     * Solution: You will have to define a new POJO class containing only the selected fields.
+     * - https://stackoverflow.com/questions/76692158/unable-to-find-column-position-by-name-column1-the-column-name-column1-was-not
+     * - It looks like you want to read only selected fields from the table. In this case you can't use the entity class in the result list.
+     * - Define a new class (POJO) containing only the fields you have in the select statement.
+     */
+    @Test
+    void selfProductServiceFetchProductsByCategory() {
+        String category = "electronics";
+        logger.logInfo("SelfProductService :: fetchProductsByCategory(" + category + ") :: " + this.productService.fetchProductsByCategory(category));
+    }
+
+
+    // Example of custom query: JPA Query
+    @Test
+    void selfProductServicePullProductsByCategory() {
+        String categoryName = "electronics";
+        logger.logInfo("SelfProductService :: pullProductsByCategory(" + categoryName + ") :: " + this.productService.pullProductsByCategory(categoryName));
+    }
 }

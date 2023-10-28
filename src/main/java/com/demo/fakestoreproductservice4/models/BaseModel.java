@@ -13,6 +13,6 @@ import lombok.Setter;
 public class BaseModel {
     // Fields
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }
